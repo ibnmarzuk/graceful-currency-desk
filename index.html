@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Desk rate converter</title>
+  <style>
+    body { font-family: Georgia, serif; margin: 2rem auto; max-width: 36rem; line-height: 1.45; color: #1c1917; }
+    h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+    p { color: #44403c; }
+    form { display: grid; gap: 0.75rem; margin-top: 1.25rem; }
+    label { display: grid; gap: 0.25rem; font-size: 0.95rem; }
+    input { font: inherit; padding: 0.5rem 0.6rem; border: 1px solid #a8a29e; }
+    button { font: inherit; padding: 0.55rem 0.8rem; background: #1c1917; color: #fafaf9; border: 0; width: fit-content; }
+    .out { margin-top: 1rem; padding: 0.8rem 0.9rem; border: 1px solid #d6d3d1; min-height: 3rem; }
+    .bad { border-color: #b91c1c; background: #fef2f2; }
+    .good { border-color: #3f6212; background: #f7fee7; }
+  </style>
+</head>
+<body>
+  <h1>Desk rate converter</h1>
+  <p>Converts with a fixed local table only. Nothing is sent to a live rate service. Supported codes: NGN, USD, GBP, EUR, GHS.</p>
+  <form id="form">
+    <label>Amount <input id="amount" name="amount" inputmode="decimal" placeholder="25000" /></label>
+    <label>From <input id="from" name="from" maxlength="40" placeholder="NGN" /></label>
+    <label>To <input id="to" name="to" maxlength="40" placeholder="USD" /></label>
+    <button type="submit">Convert</button>
+  </form>
+  <div id="out" class="out" role="status" aria-live="polite">Enter an amount and two currency codes.</div>
+  <script src="converter.js"></script>
+  <script>
+    const form = document.getElementById("form");
+    const out = document.getElementById("out");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const response = handleUserRequest({
+        amount: document.getElementById("amount").value,
+        from: document.getElementById("from").value,
+        to: document.getElementById("to").value,
+      });
+      out.textContent = response.userMessage;
+      out.className = response.ok ? "out good" : "out bad";
+    });
+  </script>
+</body>
+</html>
